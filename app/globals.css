@@ -1,26 +1,321 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --primary: #2563eb;
+  --sidebar: #ffffff;
+  --sidebar-text: #64748b;
+  --border: #e2e8f0;
+  --card: #ffffff;
+  --input: #ffffff;
+  --topbar: rgba(255, 255, 255, 0.8);
+  --muted: #f8fafc;
+  --uploader-bg: #f9fafb;
+}
+
+.dark {
+  --background: #020617;
+  --foreground: #f8fafc;
+  --primary: #3b82f6;
+  --sidebar: #0f172a;
+  --sidebar-text: #cbd5e1;
+  --border: #1e293b;
+  --card: #0f172a;
+  --input: #1e293b;
+  --topbar: rgba(15, 23, 42, 0.8);
+  --muted: #1e293b;
+  --uploader-bg: #161b22;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-primary: var(--primary);
+  --color-sidebar: var(--sidebar);
+  --color-border: var(--border);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Manrope", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Sidebar & Layout Fixes */
+.lv-shell {
+  background-color: var(--background) !important;
+}
+
+.lv-sider {
+  background: var(--sidebar) !important;
+  border-right: 1px solid var(--border) !important;
+}
+
+.lv-menu-item {
+  margin: 4px 12px !important;
+  border-radius: 10px !important;
+  width: calc(100% - 24px) !important;
+  color: var(--sidebar-text) !important;
+  height: 42px !important;
+  line-height: 42px !important;
+}
+
+.ant-menu-item-selected.lv-menu-item {
+  background: var(--primary) !important;
+  color: #ffffff !important;
+}
+
+.lv-topbar {
+  background: var(--topbar) !important;
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border) !important;
+}
+
+/* Force backgrounds immediately via CSS variables */
+.ant-layout, 
+.ant-layout-sider, 
+.ant-layout-content,
+.lv-shell,
+.lv-main,
+.lv-sider,
+.ant-drawer-content,
+.ant-modal-content {
+  background-color: var(--background) !important;
+}
+
+.lv-sider, .ant-layout-sider {
+  background-color: var(--sidebar) !important;
+}
+
+.dark .ant-layout, 
+.dark .ant-layout-sider, 
+.dark .ant-layout-content,
+.dark .lv-shell,
+.dark .lv-main,
+.dark .lv-sider,
+.dark .ant-drawer-content,
+.dark .ant-modal-content {
+  background-color: #020617 !important;
+}
+
+/* Ant Design Menu Dark Fixes */
+.dark .ant-menu {
+  background-color: transparent !important;
+  color: #cbd5e1 !important;
+}
+
+.dark .ant-menu-item {
+  color: #cbd5e1 !important;
+}
+
+.dark .ant-menu-item-selected {
+  background-color: var(--primary) !important;
+  color: #ffffff !important;
+}
+
+/* Custom Scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 10px;
+}
+
+/* Ant Design Overrides */
+.ant-btn {
+  box-shadow: none !important;
+}
+
+.ant-input-affix-wrapper, .ant-input {
+  border-color: var(--border) !important;
+}
+
+.ant-card {
+  background: var(--card) !important;
+  border-color: var(--border) !important;
+}
+
+.ant-modal-content {
+  background: var(--card) !important;
+  border: 1px solid var(--border) !important;
+  padding: 0 !important;
+}
+
+.ant-modal-header {
+  background: var(--card) !important;
+  border-bottom: 1px solid var(--border) !important;
+  padding: 16px 24px !important;
+  margin-bottom: 0 !important;
+}
+
+.ant-modal-body {
+  padding: 24px !important;
+}
+
+.ant-modal-footer {
+  padding: 16px 24px !important;
+  border-top: 1px solid var(--border) !important;
+  margin-top: 0 !important;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  /* Animation removed */
+}
+
+/* Vault List Grid Fix */
+.lv-vault-list .ant-list-items {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Command Palette Fixes */
+.lv-modal .ant-modal-body {
+  padding: 0 !important;
+}
+
+.spotlight-modal .ant-input-affix-wrapper {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.spotlight-modal .ant-input-prefix {
+  margin-right: 12px !important;
+}
+
+.spotlight-modal .ant-input {
+  font-size: 18px !important;
+  color: var(--foreground) !important;
+}
+
+.spotlight-modal .ant-input::placeholder {
+  color: var(--sidebar-text) !important;
+  opacity: 0.5;
+}
+
+.spotlight-modal .ant-modal-content {
+  overflow: hidden !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Tooltip custom colors */
+.ant-tooltip-inner {
+  background-color: var(--foreground) !important;
+  color: var(--background) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  padding: 4px 10px !important;
+  border-radius: 6px !important;
+}
+
+.ant-tooltip-arrow::before {
+  background-color: var(--foreground) !important;
+}
+
+/* Page Transitions */
+.lv-page {
+  /* Animation removed */
+}
+
+/* Image Hover Effects */
+.lv-card-image-container {
+  overflow: hidden;
+}
+
+.lv-card-image-container img {
+  transition: transform 0.5s ease;
+}
+
+.ant-card:hover .lv-card-image-container img {
+  transform: scale(1.05);
+}
+
+/* Button Refinements */
+.ant-btn-primary {
+  background: var(--primary) !important;
+  font-weight: 600 !important;
+}
+
+.ant-btn-text:hover {
+  background: var(--muted) !important;
+}
+
+/* Skeleton/Loading states */
+.ant-skeleton-content .ant-skeleton-title, 
+.ant-skeleton-content .ant-skeleton-paragraph > li {
+  background: var(--muted) !important;
+  opacity: 0.5;
+}
+
+/* Navigation Badges */
+.lv-nav-badge {
+  font-size: 10px !important;
+  padding: 0 6px !important;
+  height: 18px !important;
+  line-height: 18px !important;
+  border-radius: 6px !important;
+  font-weight: 700 !important;
+  opacity: 0;
+  transition: opacity 160ms ease;
+}
+
+.dark .ant-select-selector {
+  background-color: var(--input) !important;
+  border-color: var(--border) !important;
+  color: var(--foreground) !important;
+}
+
+.dark .ant-select-arrow {
+  color: var(--sidebar-text) !important;
+}
+
+.dark .ant-select-dropdown {
+  background-color: var(--card) !important;
+  border: 1px solid var(--border) !important;
+}
+
+.dark .ant-select-item {
+  color: var(--foreground) !important;
+}
+
+.dark .ant-select-item-option-selected {
+  background-color: var(--primary) !important;
+  color: #ffffff !important;
+}
+
+.dark .ant-select-item-option-active {
+  background-color: var(--muted) !important;
+}
+
+/* Typography */
+.ant-typography, h1, h2, h3, h4, .ant-table-cell {
+  color: var(--foreground) !important;
+}
+
+.ant-typography-secondary {
+  color: var(--sidebar-text) !important;
 }

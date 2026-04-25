@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/client"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Link {
+  id             String    @id @default(cuid())
+  originalUrl    String
+  title          String
+  description    String?
+  image          String?
+  contentArchive String?
+  notes          String?
+  shortCode      String    @unique
+  createdAt      DateTime  @default(now())
+
+  authorId       String?
+  author         Author?   @relation(fields: [authorId], references: [id])
+
+  categoryId     String?
+  category       Category? @relation(fields: [categoryId], references: [id])
+
+  tags           Tag[]     @relation("LinkTags")
+
+  format         Format
+
+  @@index([createdAt])
+  @@index([categoryId])
+  @@index([authorId])
+  @@index([format])
+}
+
+model Author {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  type      AuthorType @default(Creator)
+  avatarUrl String?
+  bio       String?
+  website   String?
+  links     Link[]
+  createdAt DateTime @default(now())
+}
+
+model Tag {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  color       String?
+  categoryId  String?
+  category    Category? @relation(fields: [categoryId], references: [id])
+  links       Link[]   @relation("LinkTags")
+  createdAt   DateTime @default(now())
+
+  @@unique([name, categoryId])
+  @@index([categoryId])
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  icon        String?
+  links       Link[]
+  tags        Tag[]
+  createdAt   DateTime @default(now())
+}
+
+enum AuthorType {
+  Creator
+  Writer
+  Artist
+  Singer
+  Developer
+  Educator
+  Company
+  Organization
+}
+
+enum Format {
+  Web
+  YouTube
+  Article
+  Song
+  Tool
+  Course
+}
